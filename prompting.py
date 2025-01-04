@@ -4,7 +4,7 @@ import json
 OLLAMA_API_URL = 'http://localhost:11434/api/generate'
 
 def get_disease(symptoms):
-    prompt = f"Given the following symptoms: {', '.join(symptoms)}, identify possible diseases."
+    prompt = f"Given the following symptoms: {symptoms}, identify possible diseases."
     payload = {
         "model": "llama3.2",        # Tu można zmienić model Ollama
         "prompt": prompt,
@@ -12,7 +12,7 @@ def get_disease(symptoms):
         "max_tokens": 50,
         "stream": False
     }
-
+    print(prompt)
     try:
         response = requests.post(OLLAMA_API_URL, json=payload)
         response.raise_for_status()
@@ -40,7 +40,3 @@ def get_disease(symptoms):
     except KeyError as ke:
         print(f"KeyError in aAPI response: {ke}")
         return []
-
-symptoms = ["fever", "cough", "sore throat"]
-detected_diseases = get_disease(symptoms)
-print("detected diseases: ", detected_diseases)
