@@ -1,6 +1,7 @@
 import json 
 import os 
-import csv 
+import csv
+import re
 
 
 # Funkcja zapisująca dane pacjenta w pliku .csv 
@@ -63,7 +64,38 @@ def extract_data(folder, output):
     print("Zapisano dane pacjenta")
 
 
-folder = 'fhir'
-output = 'pacjenci.csv'
+# Funkcja wczytująca dane z pliku csv do tablic
+def process_csv(filepath):
+    symptoms_list = []
+    diagnoses_list = []
 
-extract_data(folder, output)
+    with (open(filepath, mode='r', encoding='utf-8') as file):
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            if not row:
+                continue
+
+            # Ekstrakcja danych
+            names = row[0]
+            symptoms = row[1]
+            diagnoses = row[2]
+
+            # Ekstrakcja symptomów i diagnoz
+            #symptoms_str, diagnoses_str = symptoms_diagnoses.split(",", maxsplit=1)
+            #symptoms = {symptom.strip() for symptom in symptoms_str.split(";")}
+            #diagnoses = {diagnosis.strip() for diagnosis in diagnoses_str.split(";")}
+
+            # Stworzenie tablic - pojedynczy rekord zawiera wszystkie symptomy lub diagnozy pojedynczego pacjenta
+            symptoms_list.append(symptoms)
+            diagnoses_list.append(diagnoses)
+    return symptoms_list, diagnoses_list
+
+
+# Funkcja, która z odpowiedzi modelu tworzy listę z przewidzianymi nazwami chorób
+def process_answer(answer):
+    diseases = []
+    pattern = r'\*\*(.*?)\*\*'  # Nazwy chorób znajdują się pomiędzy znakami ** (np. **choroba1**)
+    for line in answer:
+        matches = re.findall(pattern, line)
+        diseases.extend(matches)
+    return diseases
