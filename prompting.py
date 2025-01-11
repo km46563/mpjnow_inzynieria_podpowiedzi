@@ -4,7 +4,7 @@ import json
 OLLAMA_API_URL = 'http://localhost:11434/api/generate'
 
 def get_disease(symptoms):
-    prompt = f"Given the following symptoms: {symptoms}, identify possible diseases."
+    prompt = f'Given the following symptoms: {symptoms}, identify possible diseases. Answer me with the following format: "**disease1**, **disease2**, **disease3**, ..."'
     payload = {
         "model": "llama3.2",        # Tu można zmienić model Ollama
         "prompt": prompt,

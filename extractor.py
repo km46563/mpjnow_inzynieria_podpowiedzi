@@ -66,8 +66,7 @@ def extract_data(folder, output):
 
 # Funkcja wczytująca dane z pliku csv do tablic
 def process_csv(filepath):
-    symptoms_list = []
-    diagnoses_list = []
+    data = {}
 
     with (open(filepath, mode='r', encoding='utf-8') as file):
         csv_reader = csv.reader(file)
@@ -77,18 +76,17 @@ def process_csv(filepath):
 
             # Ekstrakcja danych
             names = row[0]
-            symptoms = row[1]
-            diagnoses = row[2]
+            symptoms = row[1].split(', ')
+            diagnoses = row[2].split(', ')
 
             # Ekstrakcja symptomów i diagnoz
             #symptoms_str, diagnoses_str = symptoms_diagnoses.split(",", maxsplit=1)
             #symptoms = {symptom.strip() for symptom in symptoms_str.split(";")}
             #diagnoses = {diagnosis.strip() for diagnosis in diagnoses_str.split(";")}
 
-            # Stworzenie tablic - pojedynczy rekord zawiera wszystkie symptomy lub diagnozy pojedynczego pacjenta
-            symptoms_list.append(symptoms)
-            diagnoses_list.append(diagnoses)
-    return symptoms_list, diagnoses_list
+            # Stworzenie słownika - pojedynczy rekord zawiera wszystkie symptomy lub diagnozy pojedynczego pacjenta
+            data[names] = {'symptoms': symptoms, 'diagnoses': diagnoses}
+    return data
 
 
 # Funkcja, która z odpowiedzi modelu tworzy listę z przewidzianymi nazwami chorób
