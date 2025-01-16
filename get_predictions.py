@@ -2,6 +2,7 @@ import csv
 
 from prompting import get_disease, get_disease_one_shot, get_disease_few_shot
 from extractor import process_csv, process_answer
+from utils import process_predicted_diseases, extract_disorders, compare_diseases_fuzzy
 
 filepath = 'pacjenci.csv'
 data = process_csv(filepath)
@@ -62,3 +63,38 @@ with open(output_csv_few_shot, mode='a', encoding='utf-8', newline='') as file:
         ])
 
 print("ZAKONCZONO FEW-SHOT")
+
+print("----------------------------")
+print("TRUE DISEASES")
+true_diseases = extract_disorders(filepath)
+print(true_diseases)
+
+print("----------------------------")
+print("PREDICTED DISEASES ZERO SHOT")
+predicted_diseases_zero = process_predicted_diseases(output_csv_zero_shot)
+print(predicted_diseases_zero)
+
+print("----------------------------")
+print("PREDICTED DISEASES ONE SHOT")
+predicted_diseases_one = process_predicted_diseases(output_csv_one_shot)
+print(predicted_diseases_one)
+
+print("----------------------------")
+print("PREDICTED DISEASES FEW SHOT")
+predicted_diseases_few = process_predicted_diseases(output_csv_few_shot)
+print(predicted_diseases_few)
+
+print("----------------------------")
+print("COMPARE DISEASES ZERO SHOT")
+accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_zero, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy:.2%}")
+
+print("----------------------------")
+print("COMPARE DISEASES ONE SHOT")
+accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_one, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy:.2%}")
+
+print("----------------------------")
+print("COMPARE DISEASES FEW SHOT")
+accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_few, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy:.2%}")
