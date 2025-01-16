@@ -86,6 +86,7 @@ def process_csv(filepath):
 
             # Stworzenie słownika - pojedynczy rekord zawiera wszystkie symptomy lub diagnozy pojedynczego pacjenta
             data[names] = {'symptoms': symptoms, 'diagnoses': diagnoses}
+            print(f"Przeprocesowano plik csv:{filepath}")
     return data
 
 
@@ -97,3 +98,5 @@ def process_answer(answer):
         matches = re.findall(pattern, line)
         diseases.extend(matches)
     return diseases
+
+# extract_data("fhir", "pacjenci.csv")
