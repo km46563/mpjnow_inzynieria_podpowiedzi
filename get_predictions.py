@@ -9,6 +9,7 @@ data = process_csv(filepath)
 output_csv_zero_shot = 'patients_data_zero_shot.csv'
 output_csv_one_shot = 'patients_data_one_shot.csv'
 output_csv_few_shot = 'patients_data_few_shot.csv'
+accuracy_csv = 'accuracy_results.csv'
 
 # Zero-shot implementation
 with open(output_csv_zero_shot, mode='a', encoding='utf-8', newline='') as file:
@@ -86,15 +87,24 @@ print(predicted_diseases_few)
 
 print("----------------------------")
 print("COMPARE DISEASES ZERO SHOT")
-accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_zero, threshold=0.6)
-print(f"Fuzzy matching accuracy: {accuracy:.2%}")
+accuracy_zero = compare_diseases_fuzzy(true_diseases, predicted_diseases_zero, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy_zero:.2%}")
 
 print("----------------------------")
 print("COMPARE DISEASES ONE SHOT")
-accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_one, threshold=0.6)
-print(f"Fuzzy matching accuracy: {accuracy:.2%}")
+accuracy_one = compare_diseases_fuzzy(true_diseases, predicted_diseases_one, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy_one:.2%}")
 
 print("----------------------------")
 print("COMPARE DISEASES FEW SHOT")
-accuracy = compare_diseases_fuzzy(true_diseases, predicted_diseases_few, threshold=0.6)
-print(f"Fuzzy matching accuracy: {accuracy:.2%}")
+accuracy_few = compare_diseases_fuzzy(true_diseases, predicted_diseases_few, threshold=0.6)
+print(f"Fuzzy matching accuracy: {accuracy_few:.2%}")
+
+with open(accuracy_csv, mode='w', encoding='utf-8', newline='') as accuracy_file:
+    accuracy_writer = csv.writer(accuracy_file)
+    accuracy_writer.writerow(["Method", "Accuracy"])
+    accuracy_writer.writerow(["Zero-shot", f"{accuracy_zero:.2%}"])
+    accuracy_writer.writerow(["One-shot", f"{accuracy_one:.2%}"])
+    accuracy_writer.writerow(["Few-shot", f"{accuracy_few:.2%}"])
+
+print(f"Wyniki dokładności zapisane w {accuracy_csv}")
