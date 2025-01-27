@@ -13,7 +13,7 @@ def get_disease(symptoms):
     Symptoms: {symptoms}
     """
     payload = {
-        "model": "medllama2",        # Tu można zmienić model Ollama
+        "model": "llama3.2",        # Tu można zmienić model Ollama
         "prompt": prompt,
         "temperature": 0.3,          # ~0: kreatywność, ~1: precyzja
         "max_tokens": 100,
